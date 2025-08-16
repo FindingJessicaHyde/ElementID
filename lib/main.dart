@@ -1025,7 +1025,7 @@ class _PartNumberGeneratorState extends State<PartNumberGenerator> {
           // Reduce overall height of the glass container so the entire
           // form fits on typical screens without scrolling.  Adjust as
           // necessary for your target device.
-          height: 950,
+      height: 1200,
           borderRadius: 24,
           blur: 20,
           alignment: Alignment.center,
@@ -1051,7 +1051,7 @@ class _PartNumberGeneratorState extends State<PartNumberGenerator> {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const SizedBox(height: 12),
+                        const SizedBox(height: 32),
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
@@ -1069,7 +1069,7 @@ class _PartNumberGeneratorState extends State<PartNumberGenerator> {
                         onChanged: (v) => setState(() => phase = v!),
                         dropdownColor: bgColor,
                       ),
-                      const SizedBox(height: 12),
+                              const SizedBox(height: 32),
                       // Replace the subsystem dropdown with an autocomplete search.
                       Autocomplete<String>(
                         optionsBuilder: (TextEditingValue textEditingValue) {
