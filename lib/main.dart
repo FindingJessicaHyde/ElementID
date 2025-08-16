@@ -106,10 +106,10 @@ class _ThemeEditingAppState extends State<ThemeEditingApp> {
         title: const Text('Pick Primary Color'),
         content: ColorPicker(
           pickerColor: primary,
-        onColorChanged: (c) {
-          setState(() => primary = c);
-          _saveTheme();
-        },
+          onColorChanged: (c) {
+            setState(() => primary = c);
+            _saveTheme();
+          },
           showLabel: true,
           pickerAreaHeightPercent: 0.7,
         ),
@@ -148,7 +148,20 @@ class _ThemeEditingAppState extends State<ThemeEditingApp> {
   }
 }
 
-// Skipping unchanged SettingsPage for brevity...
+// Stub SettingsPage to avoid missing constructor errors
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Settings')),
+      body: const Center(
+        child: Text('Settings page not implemented'),
+      ),
+    );
+  }
+}
 
 class PartNumberGenerator extends StatefulWidget {
   final VoidCallback onEditTheme;
@@ -164,6 +177,14 @@ class PartNumberGenerator extends StatefulWidget {
 
 class _PartNumberGeneratorState extends State<PartNumberGenerator> {
   String phase = 'DES';
+
+  // Load default values when returning from the Settings page
+  Future<void> _loadDefaults() async {
+    setState(() {
+      phase = 'DES';
+      // reset other fields to defaults if necessary
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +226,8 @@ class _PartNumberGeneratorState extends State<PartNumberGenerator> {
                 ),
               );
               if (result == true) {
-                final rootState = context.findAncestorStateOfType<_ThemeEditingAppState>();
+                final rootState =
+                    context.findAncestorStateOfType<_ThemeEditingAppState>();
                 await rootState?._loadTheme();
                 await _loadDefaults();
               }
@@ -216,7 +238,7 @@ class _PartNumberGeneratorState extends State<PartNumberGenerator> {
       body: Center(
         child: GlassmorphicContainer(
           width: 700,
-          height: 950,
+          height: 1200, // increased height to avoid scrolling
           borderRadius: 24,
           blur: 20,
           alignment: Alignment.center,
@@ -242,19 +264,25 @@ class _PartNumberGeneratorState extends State<PartNumberGenerator> {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const SizedBox(height: 12),
+                const SizedBox(height: 32), // increased top padding
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
                     children: [
                       DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(hintText: 'Phase'),
+                        decoration:
+                            const InputDecoration(hintText: 'Phase'),
                         value: phase,
-                        items: [
-                          DropdownMenuItem(value: 'DES', child: Text('Design')),
-                          DropdownMenuItem(value: 'RND', child: Text('R&D')),
-                          DropdownMenuItem(value: 'PRO', child: Text('Proto')),
-                          DropdownMenuItem(value: 'PRD', child: Text('Production')),
+                        items: const [
+                          DropdownMenuItem(
+                              value: 'DES', child: Text('Design')),
+                          DropdownMenuItem(
+                              value: 'RND', child: Text('R&D')),
+                          DropdownMenuItem(
+                              value: 'PRO', child: Text('Proto')),
+                        "),
+                        DropdownMenuItem(
+                              value: 'PRD', child: Text('Production')),
                         ],
                         onChanged: (v) => setState(() => phase = v!),
                         dropdownColor: bgColor,
